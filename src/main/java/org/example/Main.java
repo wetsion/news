@@ -1,5 +1,6 @@
 package org.example;
 
+import lombok.extern.slf4j.Slf4j;
 import okhttp3.Headers;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -10,6 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+@Slf4j
 public class Main {
 
     protected static OkHttpClient httpClient = new OkHttpClient.Builder()
@@ -20,6 +22,7 @@ public class Main {
             .build();
 
     public static void main(String[] args) throws IOException {
+        Long now = System.currentTimeMillis();
         Map<String, String> hd = new HashMap<>();
         hd.put("authority", "www.bls.gov");
         hd.put("accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7");
@@ -41,6 +44,11 @@ public class Main {
                 .headers(Headers.of(hd))
                 .build();
         Response response = httpClient.newCall(request).execute();
-        System.out.println(response.body().string());
+        String body = response.body().string();
+        log.info(body);
+        log.info("pachong finish, cost: {}ms", System.currentTimeMillis() - now);
+        if (body.contains("THE EMPLOYMENT SITUATION")) {
+            log.info("pachong success");
+        }
     }
 }
