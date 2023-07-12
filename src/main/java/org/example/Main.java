@@ -1,18 +1,20 @@
 package org.example;
 
-import lombok.extern.slf4j.Slf4j;
 import okhttp3.Headers;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-@Slf4j
 public class Main {
+
+    private static final Logger log = LoggerFactory.getLogger(Main.class);
 
     protected static OkHttpClient httpClient = new OkHttpClient.Builder()
             .readTimeout(30, TimeUnit.SECONDS)
