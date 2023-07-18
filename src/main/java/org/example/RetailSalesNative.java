@@ -62,8 +62,8 @@ public class RetailSalesNative {
                 log.info("RetailSalesNative parse, key: {}", time);
                 log.info("RetailSalesNative parse finish, cost: {}ms", System.currentTimeMillis() - now);
                 TimeUnit.MILLISECONDS.sleep(50L);
-            } catch (InterruptedException e) {
-
+            } catch (Exception e) {
+                log.error("RetailSalesNative error", e);
             }
 
         }
