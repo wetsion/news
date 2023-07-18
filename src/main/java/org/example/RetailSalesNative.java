@@ -43,16 +43,24 @@ public class RetailSalesNative {
         hd.put("upgrade-insecure-requests", "1");
         hd.put("user-agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36");
         Request request = new Request.Builder()
-                .url("https://www.bls.gov/news.release/empsit.nr0.htm")
+                .url("https://www.census.gov/retail/sales.html")
                 .headers(Headers.of(hd))
                 .build();
         while (true) {
             try {
                 Long now = System.currentTimeMillis();
                 Response response = httpClient.newCall(request).execute();
-                String body = response.body().string().replace("<!DOCTYPE HTML> \n", "");
+                String body = response.body().string();
+//                System.out.println(body);
                 log.info("RetailSalesNative download finish, cost: {}ms", System.currentTimeMillis() - now);
-
+                Document document = Jsoup.parse(body, "https://www.census.gov/retail/sales.html");
+                Elements elements = document.body().select("div.publicationdate.publishdate.parbase");
+                String time = elements.get(0)
+                        .select("div.uscb-margin-TB-5").get(0)
+                        .getElementsByTag("time").get(0)
+                        .text();
+                log.info("RetailSalesNative parse, key: {}", time);
+                log.info("RetailSalesNative parse finish, cost: {}ms", System.currentTimeMillis() - now);
                 TimeUnit.MILLISECONDS.sleep(500L);
             } catch (InterruptedException e) {
 
