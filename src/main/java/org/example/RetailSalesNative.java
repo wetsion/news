@@ -27,6 +27,7 @@ public class RetailSalesNative {
             .build();
 
     public static void main(String[] args) throws IOException {
+        Long internal = Long.parseLong(args[0]);
         Map<String, String> hd = new HashMap<>();
         hd.put("authority", "www.census.gov");
         hd.put("accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7");
@@ -54,6 +55,8 @@ public class RetailSalesNative {
 //                System.out.println(body);
                 log.info("RetailSalesNative download finish, cost: {}ms", System.currentTimeMillis() - now);
                 Document document = Jsoup.parse(body, "https://www.census.gov/retail/sales.html");
+                String title = document.title();
+                log.info("RetailSalesNative html title: {}", title);
                 Elements elements = document.body().select("div.publicationdate.publishdate.parbase");
                 String time = elements.get(0)
                         .select("div.uscb-margin-TB-5").get(0)
@@ -61,7 +64,7 @@ public class RetailSalesNative {
                         .text();
                 log.info("RetailSalesNative parse, key: {}", time);
                 log.info("RetailSalesNative parse finish, cost: {}ms", System.currentTimeMillis() - now);
-                TimeUnit.MILLISECONDS.sleep(50L);
+                TimeUnit.MILLISECONDS.sleep(internal);
             } catch (Exception e) {
                 log.error("RetailSalesNative error", e);
             }
