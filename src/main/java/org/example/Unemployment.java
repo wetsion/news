@@ -60,7 +60,7 @@ public class Unemployment {
             RLock lock = RedisUtil.redissonClient().getLock("Unemployment");
             boolean getLock = false;
             try {
-                if (lock.tryLock(10L, 60L, TimeUnit.MILLISECONDS)) {
+                if (lock.tryLock(0L, 60L, TimeUnit.MILLISECONDS)) {
                     getLock = true;
                     doCrawler(request, now);
                 }
