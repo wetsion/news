@@ -1,6 +1,8 @@
 package org.example.tool;
 
+import org.apache.commons.lang3.StringUtils;
 import org.redisson.Redisson;
+import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.redisson.config.Config;
 
@@ -16,8 +18,12 @@ public class RedisUtil {
     private RedissonClient redissonClient;
 
     private RedisUtil() {
+        String local = System.getProperty("local");
+        if (StringUtils.isNotBlank(local)) {
+            return;
+        }
         config = new Config();
-        config.useSingleServer().setAddress("redis://10.200.0.7:6379")
+        config.useSingleServer().setAddress("redis://43.130.150.158:6379")
                 .setPassword("weixin").setDatabase(1);
 
         redissonClient = Redisson.create(config);
@@ -25,6 +31,14 @@ public class RedisUtil {
 
     public static RedissonClient redissonClient() {
         return REDIS_UTIL.redissonClient;
+    }
+
+    public static RLock getLock(String key) {
+        String local = System.getProperty("local");
+        if (StringUtils.isNotBlank(local)) {
+            return new LocalLock();
+        }
+        return REDIS_UTIL.redissonClient.getLock(key);
     }
 
 

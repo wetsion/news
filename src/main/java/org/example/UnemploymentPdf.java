@@ -12,6 +12,8 @@ import org.jsoup.select.Elements;
 import org.redisson.api.RLock;
 
 import java.io.*;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -57,7 +59,7 @@ public class UnemploymentPdf {
 
         while (true) {
             Long now = System.currentTimeMillis();
-            RLock lock = RedisUtil.redissonClient().getLock("UnemploymentPdf");
+            RLock lock = RedisUtil.getLock("UnemploymentPdf");
             boolean getLock = false;
             try {
                 if (lock.tryLock(0L, 60L, TimeUnit.MILLISECONDS)) {
@@ -89,10 +91,11 @@ public class UnemploymentPdf {
             File file = File.createTempFile("sample", ".pdf");
             try (InputStream inputStream = body.byteStream();
                 OutputStream outputStream = new FileOutputStream(file)) {
-                byte[] buffer = new byte[8192];
+                byte[] buffer = new byte[4];
                 int bytesRead;
                 while ((bytesRead = inputStream.read(buffer)) != -1) {
                     outputStream.write(buffer, 0, bytesRead);
+//                    parseStream(buffer, bytesRead);
                 }
                 log.info("UnemploymentPdf download finish, cost: {}ms", System.currentTimeMillis() - start);
             }
@@ -100,8 +103,10 @@ public class UnemploymentPdf {
             try (PDDocument document = PDDocument.load(file)) {
                 PDFTextStripper textStripper = new PDFTextStripper();
                 String content = textStripper.getText(document);
-                if (content.contains("UNEMPLOYMENT INSURANCE WEEKLY CLAIMS ")) {
-                    log.info("UnemploymentPdf parse, keyword");
+                if (content.contains("TRANSMISSION OF MATERIALS IN THIS RELEASE IS EMBARGOED UNTIL")) {
+                    int index = content.indexOf("TRANSMISSION OF MATERIALS IN THIS RELEASE IS EMBARGOED UNTIL");
+                    String kw = content.substring(index+62, index+100);
+                    log.info("UnemploymentPdf parse, keyword: {}", kw);
                 }
             } catch (IOException e) {
 
@@ -109,5 +114,12 @@ public class UnemploymentPdf {
         }
 
 
+    }
+
+    private static void parseStream(byte[] buffer, int bytesRead) {
+        // 这里可以进行解析文件流的操作
+        // 例如，可以将数据转换为字符串并处理数据
+        String data = new String(buffer, 0, bytesRead);
+        System.out.println("Parsed data: " + data);
     }
 }
