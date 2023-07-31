@@ -26,7 +26,7 @@ public class JpSankou {
             .retryOnConnectionFailure(true)
             .build();
 
-    private final static Long INTERVAL = 700L;
+    private final static Long INTERVAL = 400L;
     private final static String PDF_URL = "https://www.stat.go.jp/data/roudou/sokuhou/tsuki/pdf/202305sankou.pdf";
     private final static String HTML_URL = "https://www.stat.go.jp/data/roudou/sokuhou/tsuki/index.html";
 
