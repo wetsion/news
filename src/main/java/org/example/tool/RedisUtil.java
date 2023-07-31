@@ -23,7 +23,7 @@ public class RedisUtil {
             return;
         }
         config = new Config();
-        config.useSingleServer().setAddress("redis://10.200.0.7:6379")
+        config.useSingleServer().setAddress("redis://10.203.0.15:6379")
                 .setPassword("weixin").setDatabase(1);
 
         redissonClient = Redisson.create(config);
