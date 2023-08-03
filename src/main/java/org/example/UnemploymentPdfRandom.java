@@ -31,7 +31,7 @@ public class UnemploymentPdfRandom {
 
     private final static Long INTERVAL = 200L;
 
-    private final static String SERIAL_KEY = "UnemploymentPdfRandomSerial";
+    private final static String SERIAL_KEY = "UnemploymentPdfRandomSerialTmp";
 
 
     public static void main(String[] args) {
