@@ -30,7 +30,8 @@ public class UnemploymentPdf {
             .build();
 
     private final static Long INTERVAL = 700L;
-    private final static String URL = "https://www.dol.gov/ui/data.pdf";
+//    private final static String URL = "https://www.dol.gov/ui/data.pdf";
+    private final static String URL = "https://www.dol.gov/sites/dolgov/files/OPA/newsreleases/ui-claims/20231664.pdf";
 
 
     public static void main(String[] args) {
@@ -86,6 +87,10 @@ public class UnemploymentPdf {
 
     private static void doCrawler(Request request, Long start) throws IOException {
         Response response = httpClient.newCall(request).execute();
+        if (response.code() == 404) {
+            log.info("UnemploymentPdf not found, cost: {}ms", System.currentTimeMillis() - start);
+            return;
+        }
         ResponseBody body = response.body();
         if (Objects.nonNull(body)) {
             File file = File.createTempFile("sample", ".pdf");
