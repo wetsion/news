@@ -29,7 +29,7 @@ public class UnemploymentPdf {
             .retryOnConnectionFailure(true)
             .build();
 
-    private final static Long INTERVAL = 700L;
+    private final static Long INTERVAL = 100L;
 //    private final static String URL = "https://www.dol.gov/ui/data.pdf";
     private final static String URL = "https://www.dol.gov/sites/dolgov/files/OPA/newsreleases/ui-claims/20231664.pdf";
 
