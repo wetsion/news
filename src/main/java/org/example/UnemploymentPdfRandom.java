@@ -29,6 +29,8 @@ public class UnemploymentPdfRandom {
 
     private final static Long INIT = 1664L;
 
+    private final static Long INTERVAL = 200L;
+
     private final static String SERIAL_KEY = "UnemploymentPdfRandomSerial";
 
 
@@ -71,6 +73,11 @@ public class UnemploymentPdfRandom {
             }
             Long cost = System.currentTimeMillis() - now;
             log.info("UnemploymentPdfRandom step: {} parse finish, cost: {}ms", currentStep, cost);
+            if (cost < INTERVAL) {
+                try {
+                    TimeUnit.MILLISECONDS.sleep(INTERVAL - cost);
+                } catch (InterruptedException e) {}
+            }
         }
     }
 
@@ -103,6 +110,7 @@ public class UnemploymentPdfRandom {
                     String kw = content.substring(index+62, index+100);
                     log.info("UnemploymentPdfRandom parse, step: {} keyword: {}", currentStep, kw);
                 }
+                log.info("UnemploymentPdfRandom not contain, step: {}", currentStep);
             } catch (IOException e) {
 
             }
