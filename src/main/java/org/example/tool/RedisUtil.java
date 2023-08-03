@@ -48,4 +48,8 @@ public class RedisUtil {
             redissonClient.shutdown();
         }
     }
+
+    public static Long addAndGet(String key) {
+        return REDIS_UTIL.redissonClient.getAtomicLong(key).incrementAndGet();
+    }
 }
