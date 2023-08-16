@@ -6,7 +6,6 @@ import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.redisson.config.Config;
 
-import javax.annotation.PreDestroy;
 import java.util.Objects;
 
 public class RedisUtil {
@@ -42,7 +41,6 @@ public class RedisUtil {
     }
 
 
-    @PreDestroy
     public void destroy() {
         if (Objects.nonNull(redissonClient)) {
             redissonClient.shutdown();
