@@ -32,7 +32,7 @@ public class UnemploymentPdfRandom {
 
 
     public static void main(String[] args) {
-        String step = System.getProperty("step");
+        String step = args[0];
         if (StringUtils.isNotBlank(step)) {
             doDownLoad(Long.parseLong(step));
         } else {
