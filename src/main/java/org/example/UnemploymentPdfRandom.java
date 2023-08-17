@@ -2,17 +2,14 @@ package org.example;
 
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
-import org.example.tool.RedisUtil;
-import org.redisson.api.RLock;
 
 import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
@@ -27,18 +24,19 @@ public class UnemploymentPdfRandom {
 
     private final static String URL = "https://www.dol.gov/sites/dolgov/files/OPA/newsreleases/ui-claims/2023";
 
-    private final static Long INIT = 1664L;
+    private final static Long INIT = 1764L;
 
-    private final static Long INTERVAL = 200L;
+    private final static Long INTERVAL = 600L;
 
     private final static String SERIAL_KEY = "UnemploymentPdfRandomSerialTmp";
 
 
     public static void main(String[] args) {
-        ExecutorService threadPool = Executors.newFixedThreadPool(10);
-        for (int i = 0; i < 10; i++) {
-            Long step = RedisUtil.addAndGet(SERIAL_KEY);
-            threadPool.execute(() -> doDownLoad(step));
+        String step = System.getProperty("step");
+        if (StringUtils.isNotBlank(step)) {
+            doDownLoad(Long.parseLong(step));
+        } else {
+            doDownLoad(0L);
         }
     }
 
@@ -86,6 +84,10 @@ public class UnemploymentPdfRandom {
         if (response.code() == 404) {
             response.close();
             log.info("UnemploymentPdfRandom not found, step: {} cost: {}ms", currentStep, System.currentTimeMillis() - start);
+            return;
+        } else if (response.code() != 200) {
+            response.close();
+            log.info("UnemploymentPdfRandom not success, step: {} cost: {}ms", currentStep, System.currentTimeMillis() - start);
             return;
         }
         log.info("UnemploymentPdfRandom found! step: {} cost: {}ms", currentStep, System.currentTimeMillis() - start);
