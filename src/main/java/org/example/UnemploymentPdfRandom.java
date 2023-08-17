@@ -111,8 +111,9 @@ public class UnemploymentPdfRandom {
                     int index = content.indexOf("TRANSMISSION OF MATERIALS IN THIS RELEASE IS EMBARGOED UNTIL");
                     String kw = content.substring(index+62, index+100);
                     log.info("UnemploymentPdfRandom parse, step: {} keyword: {}", currentStep, kw);
+                } else {
+                    log.info("UnemploymentPdfRandom not contain, step: {}", currentStep);
                 }
-                log.info("UnemploymentPdfRandom not contain, step: {}", currentStep);
             } catch (IOException e) {
 
             }
