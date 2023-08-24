@@ -24,7 +24,7 @@ public class UnemploymentPdfRandom {
 
     private final static String URL = "https://www.dol.gov/sites/dolgov/files/OPA/newsreleases/ui-claims/2023";
 
-    private final static Long INIT = 1764L;
+    private final static Long INIT = 1840L;
 
     private final static Long INTERVAL = 600L;
 
